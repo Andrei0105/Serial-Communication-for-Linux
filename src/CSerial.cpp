@@ -40,6 +40,7 @@ CSerial::CSerial(char* portName, long baudRate, int parity, int stopBits, int da
 	this->dataBits = dataBits;
 	this->thread = NULL;
 	this->fd = NULL;
+	//InitLock();
 
 }
 
@@ -88,6 +89,7 @@ void CSerial::Start()
 CSerial::~CSerial()
 {
 	delete[] portName;
+	//DelLock();
 }
 
 ssize_t CSerial::Write(const char* data, unsigned int size)
@@ -102,12 +104,15 @@ void *ContinuousRead(void *cInstance)
 	char buf[1];
 	while(true)
 	{
+
 		int n = read (callingInstance->fd, buf, 1);
 		//std::cout<<n;
+		callingInstance->buffer.LockBuffer();
 		if(n)
 		{
 			callingInstance->buffer.AddData(buf, 1);
 		}
+		callingInstance->buffer.UnlockBuffer();
 	}
 }
 

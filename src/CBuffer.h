@@ -15,6 +15,7 @@ public:
 	std::string internalBuffer;
 	long maxSize;
 	//long size; //not needed -> use internalBuffer.size()
+	pthread_mutex_t mutex;
 	void Init();
 
 public:
@@ -32,6 +33,8 @@ public:
 	inline long GetSize() { return internalBuffer.size(); }
 	inline bool IsEmpty() { return internalBuffer.size() == 0; }
 
+	inline void LockBuffer() {pthread_mutex_lock(&mutex);}
+	inline void UnlockBuffer() {pthread_mutex_unlock(&mutex);}
 };
 
 

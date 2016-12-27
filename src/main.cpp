@@ -26,6 +26,8 @@ int main()
 	std::cout<<std::endl<<c.buffer.internalBuffer;
 	std::string str;
 	c.buffer.ReadNoBytes(str, 5);
+	c.buffer.ReadNoBytes(str, 3);
+	c.buffer.ReadNoBytes(str, 2);
 	std::cout<<"buffer"<<std::endl<<c.buffer.internalBuffer;
 	std::cout<<"str"<<std::endl<<str;
 	return 0;

@@ -8,13 +8,14 @@ CBuffer::CBuffer()
 
 void CBuffer::Init()
 {
+	pthread_mutex_init(&mutex, NULL);
 	maxSize = 0; // 0 for unlimited
 	internalBuffer.erase();
 }
 
 CBuffer::~CBuffer()
 {
-
+	pthread_mutex_destroy(&mutex);
 }
 
 void CBuffer::AddData(char ch)
@@ -39,10 +40,12 @@ void CBuffer::AddData(char *strData, int iLen)
 
 long CBuffer::ReadNoBytes(std::string &data, long noBytes)
 {
+	pthread_mutex_lock(&mutex);
 	long bufferSize = internalBuffer.size();
 	long actualNoBytes = std::min(noBytes, bufferSize);
 
 	data.append(internalBuffer.c_str(), actualNoBytes);
 	internalBuffer.erase(0, actualNoBytes);
+	pthread_mutex_unlock(&mutex);
 	return actualNoBytes;
 }

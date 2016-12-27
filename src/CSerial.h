@@ -21,6 +21,7 @@ public:
 	int parity, stopBits, dataBits; //parity 0 none, 1 odd, 2 even, 3 mark, 4 space
 	termios options;
 	pthread_t thread;
+	pthread_mutex_t mutex;
 
 	CBuffer buffer;
 
@@ -38,6 +39,10 @@ public:
 	void Init();
 	void Start(); //start reading thread
 
+//	inline void Lock() {pthread_mutex_lock(&mutex);}
+//	inline void Unlock() {pthread_mutex_unlock(&mutex);}
+//	inline void InitLock() {pthread_mutex_init(&mutex, NULL);}
+//	inline void DelLock() {pthread_mutex_destroy(&mutex);}
 };
 
 void *ContinuousRead(void *fd);
