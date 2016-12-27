@@ -77,16 +77,17 @@ void CSerial::Init()
 		printf ("error %d from tcsetattr", errno);
 		return;
 	}
+	sleep(2); //enough time for all changes to be applied
 }
 
 void CSerial::Start()
 {
-	pthread_create(&this->thread, NULL, ContinousRead, this);
+	pthread_create(&this->thread, NULL, ContinuousRead, this);
 }
 
 CSerial::~CSerial()
 {
-
+	delete[] portName;
 }
 
 ssize_t CSerial::Write(const char* data, unsigned int size)
@@ -95,16 +96,16 @@ ssize_t CSerial::Write(const char* data, unsigned int size)
 	return noBytes;
 }
 
-void *ContinousRead(void *cInstance)
+void *ContinuousRead(void *cInstance)
 {
 	CSerial *callingInstance = (CSerial *)cInstance;
 	char buf[1];
 	while(true)
 	{
 		int n = read (callingInstance->fd, buf, 1);
+		//std::cout<<n;
 		if(n)
 		{
-			std::cout<<n;
 			callingInstance->buffer.AddData(buf, 1);
 		}
 	}

@@ -40,7 +40,7 @@ public:
 
 };
 
-void *ContinousRead(void *fd);
+void *ContinuousRead(void *fd);
 
 
 #endif /* SRC_CSERIAL_H_ */
