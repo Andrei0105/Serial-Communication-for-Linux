@@ -18,7 +18,7 @@ public:
 	int fd;
 	char* portName;
 	long baudRate;
-	int parity, stopBits, dataBits; //parity 0 none, 1 odd, 2 even, 3 mark, 4 space
+	int parity, parityOn, stopBits, dataBits; //parity 0 none, 1 odd, 2 even
 	termios options;
 	pthread_t thread;
 	pthread_mutex_t mutex;

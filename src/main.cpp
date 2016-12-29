@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <iostream>
+#include <bitset>
 #include "CSerial.h"
 
 
@@ -13,7 +14,7 @@ int main()
 {
 	char *portname = "/dev/ttyUSB0";
 
-	CSerial c= CSerial(portname, B115200);
+	CSerial c= CSerial(portname, B115200, 0, 1, CS7);
 	c.Init();
 	c.Start();
 	int x=0;
@@ -30,5 +31,14 @@ int main()
 	c.buffer.ReadNoBytes(str, 2);
 	std::cout<<"buffer"<<std::endl<<c.buffer.internalBuffer;
 	std::cout<<"str"<<std::endl<<str;
+
+	std::cout<<std::endl;
+	for(int i = 0; i<10; i++)
+	{
+		std::cout<<(int)str.c_str()[i]<<" | ";
+		std::bitset<7> x(str.c_str()[i]);
+		std::cout << x << " | ";
+		std::cout << x.to_ulong()<<" | "<< (char)x.to_ulong()<<std::endl;
+	}
 	return 0;
 }

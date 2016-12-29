@@ -27,12 +27,26 @@ CSerial::CSerial(char* portName, long baudRate, int parity, int stopBits, int da
 	strncpy(this->portName, portName, strlen(portName) + 1);
 	this->baudRate = baudRate;
 	//
-	this->parity = parity;
-	if (stopBits == 0)
+	if(parity == 0)
+	{
+		this->parity = 0;
+		this->parityOn = 0;
+	}
+	else if(parity == 1)
+	{
+		this->parity = PARODD;
+		this->parityOn = PARENB;
+	}
+	else if(parity == 2)
+	{
+		this->parity = 0;
+		this->parityOn = PARENB;
+	}
+	if (stopBits == 1)
 	{
 		this->stopBits = 0;
 	}
-	else
+	else if (stopBits == 2)
 	{
 		this->stopBits = CSTOPB;
 	}
@@ -55,10 +69,8 @@ void CSerial::Init()
 	cfsetospeed (&options, baudRate);
 	cfsetispeed (&options, baudRate);
 
-	options.c_cflag = (options.c_cflag & ~CSIZE) | dataBits;
-
 	options.c_iflag &= ~IGNBRK;
-	options.c_iflag = 0;
+	options.c_lflag = 0;
 
 	options.c_oflag = 0;
 	options.c_cc[VMIN] = 0; //read nonblocking
@@ -66,11 +78,12 @@ void CSerial::Init()
 
 	options.c_iflag &= ~(IXON | IXOFF | IXANY); //disable xon/xoff ctrl
 
+	options.c_cflag |= dataBits;
 	options.c_cflag |= (CLOCAL | CREAD); //ignore modem controls, enable reading
-	options.c_cflag &= ~(PARENB | PARODD); //disable parity
-	options.c_cflag |= parity;
-	options.c_cflag &= ~stopBits;
-	options.c_cflag &= ~CRTSCTS;
+	options.c_cflag |= (parity|parityOn);
+	options.c_cflag |= stopBits;
+	options.c_cflag |= CRTSCTS;
+
 	tcflush(fd,TCIOFLUSH);
 
 	if (tcsetattr (fd, TCSANOW, &options) != 0)
