@@ -124,8 +124,14 @@ void *ContinuousRead(void *cInstance)
 		if(n)
 		{
 			callingInstance->buffer.AddData(buf, 1);
+			callingInstance->ProcessData(buf,n);
 		}
 		callingInstance->buffer.UnlockBuffer();
 	}
 }
 
+void CSerial::ProcessData(char* data, long length)
+{
+	if (length > 0)
+		fprintf(stdout, "%c", data[0]);
+}

@@ -43,9 +43,12 @@ public:
 //	inline void Unlock() {pthread_mutex_unlock(&mutex);}
 //	inline void InitLock() {pthread_mutex_init(&mutex, NULL);}
 //	inline void DelLock() {pthread_mutex_destroy(&mutex);}
+	virtual void ProcessData(char* data, long length);
 };
 
 void *ContinuousRead(void *fd);
+
+
 
 
 #endif /* SRC_CSERIAL_H_ */

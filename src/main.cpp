@@ -14,7 +14,7 @@ int main()
 {
 	char *portname = "/dev/ttyUSB0";
 
-	CSerial c= CSerial(portname, B115200, 0, 1, CS7);
+	/*CSerial c= CSerial(portname, B115200, 0, 1, CS7);
 	c.Init();
 	c.Start();
 	int x=0;
@@ -39,6 +39,13 @@ int main()
 		std::bitset<7> x(str.c_str()[i]);
 		std::cout << x << " | ";
 		std::cout << x.to_ulong()<<" | "<< (char)x.to_ulong()<<std::endl;
-	}
+	}*/
+
+	CSerial c = CSerial(portname, B115200, 0, 1, CS8);
+	c.Init();
+	c.Start();
+
+	getchar();
+	std::cout<<"xx"<<c.buffer.internalBuffer;
 	return 0;
 }
